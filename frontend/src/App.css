@@ -14,13 +14,19 @@
   @apply border text-base text-center
 }
 
-/* scrollbar hidden
-.scrollbar::-webkit-scrollbar{
-  display: none;
-} */
-.scrollbar
-{
-    overflow: auto;
-    -ms-overflow-style: none; /* IE 11 */
-    scrollbar-width: none; /* Firefox 64 */
+/* Hide scrollbar across all browsers */
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.scrollbar-none,
+.no-scrollbar,
+.scrollbar {
+  -ms-overflow-style: none !important; /* IE 11 and Edge */
+  scrollbar-width: none !important; /* Firefox 64+ */
 }

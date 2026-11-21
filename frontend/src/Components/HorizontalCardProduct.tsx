@@ -94,7 +94,7 @@ const HorizontalCardProduct: React.FC<HorizontalCardProductProps> = ({
       </div>
 
       <div
-        className="flex items-center gap-4 sm:gap-5 overflow-x-auto scrollbar-none py-2"
+        className="flex items-center gap-4 sm:gap-5 overflow-x-auto scroll-smooth scrollbar-none py-2"
         ref={scrollElement}
       >
         {loading

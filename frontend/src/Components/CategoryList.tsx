@@ -64,7 +64,7 @@ const CategoryList: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-4 sm:py-6">
-      <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-2 scrollbar-none justify-start md:justify-center">
+      <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto scroll-smooth scrollbar-none pb-2 justify-start md:justify-center">
         {loading
           ? skeletonList.map((_, index) => (
               <div

@@ -2,7 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    margin: 0;
-    @apply bg-slate-100
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  @apply bg-slate-100;
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari, Edge and Opera */
+  .scrollbar-none::-webkit-scrollbar,
+  .no-scrollbar::-webkit-scrollbar,
+  .scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-none,
+  .no-scrollbar,
+  .scrollbar {
+    -ms-overflow-style: none !important; /* IE and Edge */
+    scrollbar-width: none !important; /* Firefox */
+  }
 }

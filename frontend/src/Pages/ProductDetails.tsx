@@ -96,7 +96,7 @@ const ProductDetails: React.FC = () => {
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
             {/* Thumbnails */}
-            <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto max-h-[480px] scrollbar-thin">
+            <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto max-h-[480px] scrollbar-none scroll-smooth">
               {data.productImage?.map((img, idx) => (
                 <button
                   key={idx}
