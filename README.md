@@ -1,58 +1,60 @@
-## **A fully functional electronic e-commerce website using the MERN stack**
+# 🛒 Voltix ElectroMart — Modern Fullstack E-Commerce Platform
 
-## **Introduction**
-This is a fully functional electronic e-commerce website using the MERN stack. Users can buy products and pay using a card. Users can search, sort, filter products, and smooth shopping experiences. Admins can upload, delete, and edit products using the admin panel. This project provides user authentication and admin authentication using JWT and maintains responsive for different devices.
+> A production-ready, full-featured electronic e-commerce web application built end-to-end with **100% TypeScript**, **React 19**, **NestJS**, **Neon Serverless PostgreSQL**, **Prisma ORM**, and **Stripe Payments**.
 
-![](https://github.com/Ramjanict/Fullstack-Ecommerce-MERN-APP/blob/main/frontend/src/assets/home.png)
+---
 
+## ⚡ Technology Stack
 
+* **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Redux Toolkit, Lucide React, React Router v6, React Toastify, Stripe SDK
+* **Backend**: NestJS, TypeScript, Prisma ORM, Express platform, Class Validator & Transformer, Cookie Parser
+* **Database & Cloud**: Neon Serverless PostgreSQL (AWS us-east-2), Cloudinary
+* **Payments**: Stripe Checkout & Payment Processing
 
-## **Technology stack**
-**Client:** React, Redux, TailwindCSS, Context API, react-toastify,Stripe, JWT <br>
-**Server:** Node, Express, Mongoose, Cloudinary,Stripe, JWT <br>
-**Database:** MongoDB 
+---
 
+## 🚀 Key Features
 
-## **Installation**
-To install Project Title, follow these steps:
-1. Clone the repository: **`git clone https://github.com/Ramjanict/Fullstack-Ecommerce-MERN-APP.git`**
-2. Navigate to the project directory: **`cd Fullstack-Ecommerce-MERN-APP`**
-3. Install dependencies: **`npm install`**
-4. Start the project: **`npm start`**
+* 💎 **100% Strict TypeScript**: Zero JavaScript on both backend (NestJS) and frontend (React 19 + Vite), fully typed interfaces for products, users, cart, and orders.
+* ⚡ **Voltix Modern UI**: Sleek, modern header with category navigation, interactive product carousels, responsive catalog grid, and dark/light accents.
+* 📦 **Expanded Catalog (36+ Real Products)**: Full multi-item selections across all 12 categories (`airpodes`, `watches`, `mobiles`, `earphones`, `camera`, `Mouse`, `televisions`, `speakers`, `printers`, `processor`, `refrigerator`, `trimmers`).
+* 🛡️ **Enterprise NestJS Architecture**: Modular clean architecture (Auth, User, Product, Cart, Order) with dependency injection, DTO validation, and role-based guards.
+* 🐘 **Neon Serverless PostgreSQL + Prisma**: Scalable relational schema with instant pooled connection, migrations, and automatic seeding.
+* 🔐 **Secure JWT Authentication**: HTTP-Only, SameSite cookies with bcryptjs password hashing and role-based access control (`ADMIN` / `GENERAL`).
+* 💳 **Stripe Checkout**: Real Stripe payment integration with checkout sessions, order persistence in PostgreSQL, and order fulfillment status tracking (`PROCESSING`, `SHIPPED`, `DELIVERED`).
+* 👑 **Full Admin Suite**: Product management (upload, update, delete with Cloudinary / local preview), user role control, and order tracking.
 
-## **Instructions to run locally**
-To use Project Title, follow these steps:
-1. Open the project in your favorite code editor.
-2. Modify the source code to fit your needs.
-3. Frontend project: **`npm start`**
-4. Backend project: **`npm start`**
-5. Use the project as desired.
+---
 
-## **Admin credentials**
-Email: md@gmail.com <br>
-Password: 12345 
+## 🔑 Admin Credentials
+* **Email**: `md@gmail.com`
+* **Password**: `12345`
 
+---
 
-## **Live hosting link**
-**[Live Preview](https://fullstack-ecommerce-mern-app-usvm.vercel.app)**
+## 🛠️ Getting Started
 
-## **Contributing**
-If you'd like to contribute to a fully functional electronic e-commerce website using the MERN stack, here are some guidelines:
+### **1. Backend (NestJS + Neon PostgreSQL)**
+Environment configuration is located in `backend/.env` (refer to `backend/.env.example`):
+```bash
+cd backend
+npm install
+# configure backend/.env
+npm run prisma:push    # Push schema to Neon PostgreSQL
+npm run prisma:seed    # Seed full 36+ product catalog & admin user
+npm run start:dev      # Run NestJS dev server on http://localhost:8080/api
+```
 
-1. Fork the repository.
-2. Create a new branch for your changes.
-3. Make your changes.
-4. Write tests to cover your changes.
-5. Run the tests to ensure they pass.
-6. Commit your changes.
-7. Push your changes to your forked repository.
-8. Submit a pull request.
+### **2. Frontend (React 19 + TypeScript + Vite)**
+Environment configuration is located in `frontend/.env` (refer to `frontend/.env.example`):
+```bash
+cd frontend
+npm install
+# configure frontend/.env
+npm run dev            # Run Vite dev server on http://localhost:3000
+```
 
+---
 
-## **Authors**
-Project Title was created by **[Md Ramjan Ali](https://github.com/Ramjanict)**.
-
-## **Contact**
-
-If you have any questions or comments about Project , please contact **mdramjan.ict@gmail.com**.
-
+## 👨‍💻 Author
+Created by **[Md Ramjan Ali](https://github.com/Ramjanict)**.
