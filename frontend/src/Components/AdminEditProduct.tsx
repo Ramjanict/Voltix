@@ -59,9 +59,9 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
         }));
         toast.success("Image uploaded!");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Image upload failed:", err);
-      toast.error("Failed to upload image.");
+      toast.error(err?.message || "Failed to upload image.");
     } finally {
       setUploadingImage(false);
     }

@@ -47,13 +47,14 @@ export interface Order {
   id: string;
   _id?: string;
   userId: string;
-  amount: number;
-  currency: string;
+  amount?: number;
+  totalAmount?: number;
+  currency?: string;
   orderStatus: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   paymentStatus: 'UNPAID' | 'PAID' | 'FAILED' | 'REFUNDED';
   stripeSessionId?: string;
   shippingAddress?: any;
-  items: OrderItem[];
+  items: OrderItem[] | any[];
   createdAt: string;
   updatedAt: string;
 }

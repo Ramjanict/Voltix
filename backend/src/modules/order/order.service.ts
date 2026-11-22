@@ -136,6 +136,8 @@ export class OrderService {
       data: orders.map((o) => ({
         ...o,
         _id: o.id,
+        amount: o.totalAmount,
+        totalAmount: o.totalAmount,
       })),
       success: true,
       error: false,
@@ -161,6 +163,8 @@ export class OrderService {
       data: orders.map((o) => ({
         ...o,
         _id: o.id,
+        amount: o.totalAmount,
+        totalAmount: o.totalAmount,
       })),
       success: true,
       error: false,

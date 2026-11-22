@@ -51,9 +51,9 @@ const UploadProducts: React.FC<UploadProductsProps> = ({ onClose, fetchAllProduc
         }));
         toast.success("Image uploaded!");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Image upload failed:", err);
-      toast.error("Failed to upload image. Please check Cloudinary config.");
+      toast.error(err?.message || "Failed to upload image. Please check Cloudinary config.");
     } finally {
       setUploadingImage(false);
     }

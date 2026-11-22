@@ -80,6 +80,19 @@ const Order: React.FC = () => {
       <div className="space-y-6">
         {data.map((order, idx) => {
           const orderId = order.id || order._id || `order-${idx}`;
+          const itemsTotal = (order.items || []).reduce((acc: number, item: any) => {
+            const p = Number(item.price || item.sellingPrice || 0);
+            const q = Number(item.quantity || 1);
+            return acc + p * q;
+          }, 0);
+
+          const orderTotal =
+            typeof order.totalAmount === "number" && order.totalAmount > 0
+              ? order.totalAmount
+              : typeof order.amount === "number" && order.amount > 0
+              ? order.amount
+              : itemsTotal;
+
           return (
             <div
               key={orderId}
@@ -142,44 +155,55 @@ const Order: React.FC = () => {
 
               {/* Items List */}
               <div className="p-5 divide-y divide-slate-100">
-                {(order.items || []).map((item: any, i: number) => (
-                  <div
-                    key={i}
-                    className="py-3.5 flex items-center justify-between gap-4 first:pt-0 last:pb-0"
-                  >
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-14 h-14 rounded-xl bg-slate-50 p-1.5 border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                        <img
-                          src={
-                            item.image ||
-                            item.productImage?.[0] ||
-                            "https://placehold.co/80x80"
-                          }
-                          alt={item.title || item.productName || item.name}
-                          className="w-full h-full object-scale-down"
-                        />
+                {(order.items || []).map((item: any, i: number) => {
+                  const itemPrice = Number(item.price || item.sellingPrice || 0);
+                  const itemQty = Number(item.quantity || 1);
+                  const itemImg =
+                    item.image ||
+                    (Array.isArray(item.productImage)
+                      ? item.productImage[0]
+                      : item.productImage) ||
+                    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500";
+
+                  return (
+                    <div
+                      key={i}
+                      className="py-3.5 flex items-center justify-between gap-4 first:pt-0 last:pb-0"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-14 h-14 rounded-xl bg-slate-50 p-1.5 border border-slate-200 flex-shrink-0 flex items-center justify-center">
+                          <img
+                            src={itemImg}
+                            alt={item.title || item.productName || item.name || "Product"}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src =
+                                "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500";
+                            }}
+                            className="w-full h-full object-scale-down"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-slate-800 text-sm line-clamp-1">
+                            {item.title || item.productName || item.name || "Product"}
+                          </h4>
+                          <p className="text-xs text-slate-400 mt-0.5">
+                            Quantity: {itemQty} × ${itemPrice.toFixed(2)}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-800 text-sm line-clamp-1">
-                          {item.title || item.productName || item.name}
-                        </h4>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          Quantity: {item.quantity} × ${(item.price || item.sellingPrice || 0).toFixed(2)}
-                        </p>
-                      </div>
+                      <span className="font-bold text-slate-900 text-sm">
+                        ${(itemQty * itemPrice).toFixed(2)}
+                      </span>
                     </div>
-                    <span className="font-bold text-slate-900 text-sm">
-                      ${(item.quantity * (item.price || item.sellingPrice || 0)).toFixed(2)}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Order Footer */}
               <div className="bg-slate-50/50 px-5 py-3.5 border-t border-slate-100 flex justify-between items-center text-sm">
                 <span className="text-slate-500 font-medium text-xs">Total Amount Paid</span>
                 <span className="text-lg font-black text-indigo-600">
-                  ${Number(order.amount || 0).toFixed(2)}
+                  ${Number(orderTotal).toFixed(2)}
                 </span>
               </div>
             </div>
