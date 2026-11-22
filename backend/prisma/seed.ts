@@ -6,17 +6,32 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenv.config();
 
 import { PrismaClient, Role } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('Seeding comprehensive Neon database catalog...');
 
-  // 1. Seed Admin User
-  const hashedPassword = bcrypt.hashSync('12345', 10);
+  // 1. Seed Admin Users
+  const adminPassword = bcrypt.hashSync('Admin@12345', 10);
+  const legacyPassword = bcrypt.hashSync('12345', 10);
 
   const admin = await prisma.user.upsert({
+    where: { email: 'admin@gmail.com' },
+    update: {
+      role: Role.ADMIN,
+      password: adminPassword,
+    },
+    create: {
+      name: 'System Admin',
+      email: 'admin@gmail.com',
+      password: adminPassword,
+      role: Role.ADMIN,
+    },
+  });
+
+  await prisma.user.upsert({
     where: { email: 'md@gmail.com' },
     update: {
       role: Role.ADMIN,
@@ -24,7 +39,7 @@ async function main() {
     create: {
       name: 'Md Ramjan Ali',
       email: 'md@gmail.com',
-      password: hashedPassword,
+      password: legacyPassword,
       role: Role.ADMIN,
     },
   });

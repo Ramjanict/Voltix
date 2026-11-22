@@ -27,8 +27,9 @@
 ---
 
 ## 🔑 Admin Credentials
-* **Email**: `md@gmail.com`
-* **Password**: `12345`
+* **Email**: `admin@gmail.com`
+* **Password**: `Admin@12345`
+*(Legacy demo admin: `md@gmail.com` / `12345`)*
 
 ---
 
