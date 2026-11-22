@@ -6,7 +6,68 @@ import { FiPlus, FiMinus, FiShoppingBag, FiArrowRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
-import { CartItem } from "../types";
+import { CartItem, Product } from "../types";
+
+const DEFAULT_FALLBACK_IMG =
+  "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500";
+
+// Safely extract product whether nested under product or productId
+const getProduct = (item: any): Product | null => {
+  if (
+    item?.product &&
+    typeof item.product === "object" &&
+    (item.product.productName || item.product.id)
+  ) {
+    return item.product;
+  }
+  if (
+    item?.productId &&
+    typeof item.productId === "object" &&
+    (item.productId.productName || item.productId.id)
+  ) {
+    return item.productId;
+  }
+  return item?.product || item?.productId || null;
+};
+
+// Safely extract real product image
+const getProductImage = (product: any): string => {
+  if (!product) return DEFAULT_FALLBACK_IMG;
+  const img = product.productImage || product.image;
+  if (Array.isArray(img) && img.length > 0 && typeof img[0] === "string" && img[0].trim()) {
+    return img[0];
+  }
+  if (typeof img === "string" && img.trim()) {
+    if (img.startsWith("[") && img.endsWith("]")) {
+      try {
+        const parsed = JSON.parse(img);
+        if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === "string") {
+          return parsed[0];
+        }
+      } catch (e) {}
+    }
+    return img;
+  }
+  return DEFAULT_FALLBACK_IMG;
+};
+
+// Safely extract real selling price
+const getRealPrice = (product: any): number => {
+  if (!product) return 0;
+  const selling = Number(product.sellingPrice);
+  if (!isNaN(selling) && selling > 0) return selling;
+  const regular = Number(product.price);
+  if (!isNaN(regular) && regular > 0) return regular;
+  return 0;
+};
+
+// Safely extract original MSRP / regular price
+const getOriginalPrice = (product: any): number => {
+  if (!product) return 0;
+  const regular = Number(product.price);
+  if (!isNaN(regular) && regular > 0) return regular;
+  return getRealPrice(product);
+};
 
 const Cart: React.FC = () => {
   const [data, setData] = useState<CartItem[]>([]);
@@ -76,10 +137,11 @@ const Cart: React.FC = () => {
   };
 
   const totalQuantity = data.reduce((acc, item) => acc + (item?.quantity || 1), 0);
-  const subtotal = data.reduce(
-    (acc, item) => acc + (item?.quantity || 1) * (item?.product?.sellingPrice || 0),
-    0
-  );
+  const subtotal = data.reduce((acc, item) => {
+    const prod = getProduct(item);
+    return acc + (item?.quantity || 1) * getRealPrice(prod);
+  }, 0);
+
   const shipping = subtotal > 100 || subtotal === 0 ? 0 : 15;
   const grandTotal = subtotal + shipping;
 
@@ -170,8 +232,17 @@ const Cart: React.FC = () => {
                 />
               ))
             : data.map((item, idx) => {
-                const product = item.product;
+                const product = getProduct(item);
+                const realPrice = getRealPrice(product);
+                const originalPrice = getOriginalPrice(product);
+                const hasDiscount = originalPrice > realPrice && realPrice > 0;
+                const discountPercent = hasDiscount
+                  ? Math.round(((originalPrice - realPrice) / originalPrice) * 100)
+                  : 0;
+                const productImage = getProductImage(product);
+                const productId = product?._id || product?.id;
                 const itemId = item._id || item.id;
+
                 return (
                   <div
                     key={itemId || idx}
@@ -179,32 +250,59 @@ const Cart: React.FC = () => {
                   >
                     {/* Product Image */}
                     <Link
-                      to={`/product/${product?.id || product?._id}`}
-                      className="w-24 h-24 bg-slate-50 rounded-2xl p-2 flex items-center justify-center flex-shrink-0 relative overflow-hidden"
+                      to={productId ? `/product/${productId}` : "#"}
+                      className="w-24 h-24 sm:w-28 sm:h-28 bg-slate-50 rounded-2xl p-2 flex items-center justify-center flex-shrink-0 relative overflow-hidden border border-slate-100 group-hover:border-indigo-100 transition-colors"
                     >
                       <img
-                        src={product?.productImage?.[0] || "https://placehold.co/100x100"}
-                        alt={product?.productName}
-                        className="w-full h-full object-scale-down group-hover:scale-105 transition-transform"
+                        src={productImage}
+                        alt={product?.productName || "Product"}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src =
+                            DEFAULT_FALLBACK_IMG;
+                        }}
+                        className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
+                      {hasDiscount && (
+                        <span className="absolute top-1.5 left-1.5 bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
+                          -{discountPercent}%
+                        </span>
+                      )}
                     </Link>
 
                     {/* Product Info */}
                     <div className="flex-1 min-w-0 text-center sm:text-left">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 block mb-0.5">
-                        {product?.brandName || product?.category}
-                      </span>
+                      <div className="flex items-center gap-2 justify-center sm:justify-start mb-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                          {product?.brandName || "Electronics"}
+                        </span>
+                        <span className="text-[10px] text-slate-400 capitalize">
+                          • {product?.category || "Gadget"}
+                        </span>
+                      </div>
+
                       <Link
-                        to={`/product/${product?.id || product?._id}`}
+                        to={productId ? `/product/${productId}` : "#"}
                         className="font-semibold text-sm sm:text-base text-slate-800 hover:text-indigo-600 transition-colors line-clamp-1 block"
                       >
-                        {product?.productName}
+                        {product?.productName || "Product Item"}
                       </Link>
-                      <p className="text-xs text-slate-400 capitalize mt-0.5">
-                        Category: {product?.category}
-                      </p>
-                      <div className="sm:hidden font-bold text-slate-900 mt-2">
-                        ${product?.sellingPrice}
+
+                      {/* Real Price Display */}
+                      <div className="flex items-baseline gap-2 mt-2 justify-center sm:justify-start">
+                        <span className="text-base sm:text-lg font-bold text-slate-900">
+                          ${realPrice.toFixed(2)}
+                        </span>
+                        {hasDiscount && (
+                          <span className="text-xs text-slate-400 line-through">
+                            ${originalPrice.toFixed(2)}
+                          </span>
+                        )}
+                        {hasDiscount && (
+                          <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                            Save ${(originalPrice - realPrice).toFixed(2)}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -214,7 +312,7 @@ const Cart: React.FC = () => {
                         <button
                           onClick={() => updateQuantity(itemId, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 disabled:opacity-40 transition-colors"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 disabled:opacity-40 transition-colors cursor-pointer"
                           aria-label="Decrease quantity"
                         >
                           <FiMinus className="text-xs" />
@@ -224,7 +322,7 @@ const Cart: React.FC = () => {
                         </span>
                         <button
                           onClick={() => updateQuantity(itemId, item.quantity + 1)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors cursor-pointer"
                           aria-label="Increase quantity"
                         >
                           <FiPlus className="text-xs" />
@@ -232,13 +330,13 @@ const Cart: React.FC = () => {
                       </div>
 
                       {/* Line Item Total */}
-                      <div className="hidden sm:block text-right min-w-[80px]">
-                        <span className="text-base font-bold text-slate-900">
-                          ${((product?.sellingPrice || 0) * item.quantity).toFixed(2)}
+                      <div className="hidden sm:block text-right min-w-[90px]">
+                        <span className="text-base font-bold text-slate-900 block">
+                          ${(realPrice * item.quantity).toFixed(2)}
                         </span>
                         {item.quantity > 1 && (
                           <span className="text-[10px] text-slate-400 block">
-                            ${product?.sellingPrice} each
+                            ${realPrice.toFixed(2)} each
                           </span>
                         )}
                       </div>
@@ -246,7 +344,7 @@ const Cart: React.FC = () => {
                       {/* Remove Button */}
                       <button
                         onClick={() => deleteCartProduct(itemId)}
-                        className="w-9 h-9 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
+                        className="w-9 h-9 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
                         title="Remove item"
                       >
                         <MdDeleteOutline className="text-lg" />
@@ -266,7 +364,9 @@ const Cart: React.FC = () => {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between text-slate-600">
               <span>Subtotal ({totalQuantity} items)</span>
-              <span className="font-semibold text-slate-800">${subtotal.toFixed(2)}</span>
+              <span className="font-semibold text-slate-800">
+                ${subtotal.toFixed(2)}
+              </span>
             </div>
             <div className="flex justify-between text-slate-600">
               <span>Estimated Shipping</span>

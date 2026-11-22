@@ -42,18 +42,21 @@ export class OrderService {
       'http://localhost:3000';
 
     const lineItems = cartItems.map((item) => {
-      const prod = item.productId || item;
-      const unitAmount = Math.round(Number(prod.sellingPrice || prod.price) * 100);
+      const prod = item.product || item.productId || item;
+      const price = Number(prod.sellingPrice ?? prod.price ?? 1);
+      const unitAmount = Math.max(50, Math.round(price * 100));
+      const img = Array.isArray(prod?.productImage) && prod.productImage[0]
+        ? prod.productImage[0]
+        : (typeof prod?.productImage === 'string' ? prod.productImage : undefined);
+
       return {
         price_data: {
           currency: 'usd',
           product_data: {
             name: prod.productName || 'Product',
-            images: Array.isArray(prod.productImage) && prod.productImage[0]
-              ? [prod.productImage[0]]
-              : [],
+            images: img ? [img] : [],
             metadata: {
-              productId: prod._id || prod.id,
+              productId: prod._id || prod.id || '',
             },
           },
           unit_amount: unitAmount,
@@ -79,20 +82,21 @@ export class OrderService {
 
     // Calculate total amount
     const totalAmount = cartItems.reduce((acc, curr) => {
-      const prod = curr.productId || curr;
-      return acc + (Number(prod.sellingPrice || prod.price) * Number(curr.quantity || 1));
+      const prod = curr.product || curr.productId || curr;
+      const price = Number(prod.sellingPrice ?? prod.price ?? 0);
+      return acc + (price * Number(curr.quantity || 1));
     }, 0);
 
     // Persist the real order in PostgreSQL
     const orderItems = cartItems.map((item) => {
-      const prod = item.productId || item;
+      const prod = item.product || item.productId || item;
       return {
         productId: prod._id || prod.id,
-        productName: prod.productName,
-        brandName: prod.brandName,
-        category: prod.category,
-        productImage: prod.productImage,
-        price: Number(prod.sellingPrice || prod.price),
+        productName: prod.productName || 'Product',
+        brandName: prod.brandName || '',
+        category: prod.category || '',
+        productImage: Array.isArray(prod.productImage) ? prod.productImage : [prod.productImage].filter(Boolean),
+        price: Number(prod.sellingPrice ?? prod.price ?? 0),
         quantity: Number(item.quantity || 1),
       };
     });

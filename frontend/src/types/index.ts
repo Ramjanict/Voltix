@@ -28,7 +28,7 @@ export interface CartItem {
   id: string;
   _id?: string;
   userId: string;
-  productId: string;
+  productId: string | Product;
   quantity: number;
   product?: Product;
 }

@@ -72,18 +72,25 @@ export class CartService {
       orderBy: { createdAt: 'desc' },
     });
 
-    const formatted = items.map((item) => ({
-      _id: item.id,
-      id: item.id,
-      userId: item.userId,
-      quantity: item.quantity,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-      productId: {
-        ...item.product,
-        _id: item.product.id,
-      },
-    }));
+    const formatted = items
+      .filter((item) => item.product !== null)
+      .map((item) => {
+        const prod = {
+          ...item.product,
+          _id: item.product.id,
+        };
+
+        return {
+          _id: item.id,
+          id: item.id,
+          userId: item.userId,
+          quantity: item.quantity,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+          productId: prod,
+          product: prod,
+        };
+      });
 
     return {
       data: formatted,
