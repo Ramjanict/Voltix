@@ -9,8 +9,8 @@
 | Component | Platform | Live URL |
 | :--- | :--- | :--- |
 | **Frontend Website** | Vercel (Production) | [https://voltix-ecru.vercel.app](https://voltix-ecru.vercel.app) |
-| **Backend REST API** | Render (Production) | `https://<your-render-url>.onrender.com/api` |
-| **Swagger API Documentation** | Interactive UI | `https://<your-render-url>.onrender.com/docs` (or `/api/docs`) |
+| **Backend REST API** | Render (Production) | [https://voltix-en8h.onrender.com/api](https://voltix-en8h.onrender.com/api) |
+| **Swagger API Documentation** | Interactive UI | [https://voltix-en8h.onrender.com/docs](https://voltix-en8h.onrender.com/docs) |
 | **Source Code** | GitHub | [https://github.com/Ramjanict/Voltix](https://github.com/Ramjanict/Voltix) |
 
 ---
@@ -41,7 +41,7 @@
 ## 📚 API Documentation (Swagger / OpenAPI)
 
 Interactive Swagger UI documentation is available on the backend:
-* **Production UI**: [https://voltix.onrender.com/docs](https://voltix.onrender.com/docs) (or `https://voltix.onrender.com/api/docs`)
+* **Production UI**: [https://voltix-en8h.onrender.com/docs](https://voltix-en8h.onrender.com/docs) (or [https://voltix-en8h.onrender.com/api/docs](https://voltix-en8h.onrender.com/api/docs))
 * **Local Development UI**: `http://localhost:8080/docs` (or `http://localhost:8080/api/docs`)
 * **Features**:
   * 🔐 **Authentication & Authorization**: Interactive "Authorize" modal supporting both `Bearer <token>` and HTTP-only session cookies.
