@@ -38,6 +38,99 @@
 
 ---
 
+## 📂 Project Architecture & Directory Structure
+
+```text
+Fullstack-Ecommerce-MERN-APP/
+├── backend/                              # NestJS REST API & PostgreSQL Database Layer
+│   ├── prisma/
+│   │   ├── schema.prisma                 # Prisma schema (User, Product, Cart, Order models)
+│   │   └── seed.ts                       # Database seeder (36+ products & admin user)
+│   ├── src/
+│   │   ├── common/                       # Shared cross-cutting concerns
+│   │   │   ├── decorators/               # Custom param decorators (@CurrentUser(), @Roles())
+│   │   │   └── guards/                   # Guards (AuthGuard for JWT, RolesGuard for RBAC)
+│   │   ├── modules/                      # Domain-driven NestJS feature modules
+│   │   │   ├── auth/                     # Authentication (SignUp, Login, Logout, Profile)
+│   │   │   │   ├── dto/auth.dto.ts       # Swagger & class-validator input schemas
+│   │   │   │   ├── auth.controller.ts    # Auth endpoints
+│   │   │   │   ├── auth.service.ts       # JWT generation, bcrypt verification
+│   │   │   │   └── auth.module.ts
+│   │   │   ├── user/                     # User Management (Role updates, admin listing)
+│   │   │   │   ├── dto/user.dto.ts
+│   │   │   │   ├── user.controller.ts
+│   │   │   │   ├── user.service.ts
+│   │   │   │   └── user.module.ts
+│   │   │   ├── product/                  # Catalog, Filtering, Categories & Upload
+│   │   │   │   ├── dto/product.dto.ts
+│   │   │   │   ├── product.controller.ts
+│   │   │   │   ├── product.service.ts
+│   │   │   │   └── product.module.ts
+│   │   │   ├── cart/                     # Shopping Cart (Add, Update Quantity, Remove)
+│   │   │   │   ├── dto/cart.dto.ts
+│   │   │   │   ├── cart.controller.ts
+│   │   │   │   ├── cart.service.ts
+│   │   │   │   └── cart.module.ts
+│   │   │   └── order/                    # Stripe Checkout & Order Fulfillment Tracking
+│   │   │       ├── dto/order.dto.ts
+│   │   │       ├── order.controller.ts
+│   │   │       ├── order.service.ts
+│   │   │       └── order.module.ts
+│   │   ├── prisma/                       # Global Prisma client provider module
+│   │   │   ├── prisma.module.ts
+│   │   │   └── prisma.service.ts
+│   │   ├── app.module.ts                 # Root NestJS application module
+│   │   └── main.ts                       # App entrypoint, CORS, pipes & Swagger UI setup
+│   ├── .env.example                      # Backend environment variable template
+│   ├── package.json                      # Backend dependencies & production scripts
+│   └── tsconfig.json                     # TypeScript compiler configuration
+│
+└── frontend/                             # React 19 + Vite Single Page Application
+    ├── public/
+    │   └── products/                     # High-resolution commercial product photography
+    ├── src/
+    │   ├── assets/                       # Marketing banners, brand logos & UI gifs
+    │   ├── BackendUrl/
+    │   │   └── backendUrl.ts             # Strongly-typed API endpoint registry
+    │   ├── Components/                   # Reusable UI component library
+    │   │   ├── Header.tsx                # Nav bar, live search, cart badge & user menu
+    │   │   ├── Footer.tsx                # Responsive platform footer
+    │   │   ├── BannerProduct.tsx         # Auto-advancing promotional hero slider
+    │   │   ├── CategoryList.tsx          # Horizontal category navigation bar
+    │   │   ├── HorizontalCardProduct.tsx # Sliding product showcase carousel
+    │   │   ├── VerticalCardProduct.tsx   # Responsive catalog product card grid
+    │   │   ├── AdminEditProduct.tsx      # Modal for editing product details
+    │   │   ├── UploadProducts.tsx        # Cloudinary product image uploader modal
+    │   │   └── ChangeUserRole.tsx        # Admin user permission changer
+    │   ├── Context/                      # React Context (global cart item counter)
+    │   ├── Pages/                        # Top-level view routes
+    │   │   ├── Home.tsx                  # Storefront landing page
+    │   │   ├── ProductCategory.tsx       # Category browse & multi-facet filter page
+    │   │   ├── ProductDetails.tsx        # Product image gallery, specs & add-to-cart
+    │   │   ├── Cart.tsx                  # Real-time cart calculations & Stripe checkout
+    │   │   ├── Order.tsx                 # Customer order history & fulfillment tracking
+    │   │   ├── AdminPanel.tsx            # Admin dashboard sidebar navigation
+    │   │   ├── AllProducts.tsx           # Admin product catalog manager
+    │   │   ├── AllUsers.tsx              # Admin user roles & permissions manager
+    │   │   ├── Login.tsx                 # User sign-in page
+    │   │   ├── SignUp.tsx                # User registration with avatar upload
+    │   │   ├── Success.tsx               # Stripe payment confirmation view
+    │   │   └── Cancel.tsx                # Payment cancelled fallback view
+    │   ├── routes/
+    │   │   └── index.tsx                 # React Router v6 route configuration
+    │   ├── store/                        # Redux Toolkit store & user slice
+    │   ├── types/
+    │   │   └── index.ts                  # Central TypeScript interfaces & data contracts
+    │   ├── App.tsx                       # App layout wrapper with Header & Footer
+    │   ├── main.tsx                      # React 19 DOM bootstrap
+    │   └── index.css                     # Tailwind CSS & global scrollbar styling
+    ├── .env.example                      # Frontend environment variable template
+    ├── package.json                      # Frontend dependencies & Vite scripts
+    └── vite.config.ts                    # Vite bundler configuration & local API proxy
+```
+
+---
+
 ## 📚 API Documentation (Swagger / OpenAPI)
 
 Interactive Swagger UI documentation is available on the backend:

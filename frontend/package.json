@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
-    "dev": "vite --port 3000",
-    "build": "tsc --noEmit && vite build",
+    "start": "node init && npm run dev",
+    "dev": "node init && vite --port 3000",
+    "build": "node init && tsc --noEmit && vite build",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
