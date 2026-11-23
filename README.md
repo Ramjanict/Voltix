@@ -4,6 +4,18 @@
 
 ---
 
+## 🌐 Live Deployments & URLs
+
+| Component | Platform | Live URL |
+| :--- | :--- | :--- |
+| **Frontend Website** | Vercel (Production) | [https://voltix-ecru.vercel.app](https://voltix-ecru.vercel.app) |
+| **Frontend Alternate** | Vercel (Staging) | [https://fullstack-ecommerce-mern-app-usvm.vercel.app](https://fullstack-ecommerce-mern-app-usvm.vercel.app) |
+| **Backend REST API** | Render (Production) | [https://voltix.onrender.com/api](https://voltix.onrender.com/api) |
+| **Swagger API Documentation** | Interactive UI | [https://voltix.onrender.com/docs](https://voltix.onrender.com/docs) |
+| **Source Code** | GitHub | [https://github.com/Ramjanict/Voltix](https://github.com/Ramjanict/Voltix) |
+
+---
+
 ## ⚡ Technology Stack
 
 * **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Redux Toolkit, Lucide React, React Router v6, React Toastify, Stripe SDK
@@ -30,8 +42,8 @@
 ## 📚 API Documentation (Swagger / OpenAPI)
 
 Interactive Swagger UI documentation is available on the backend:
-* **Interactive UI**: `http://localhost:8080/docs` or `http://localhost:8080/api/docs`
-* **Production UI**: `https://<your-backend-domain>/docs`
+* **Production UI**: [https://voltix.onrender.com/docs](https://voltix.onrender.com/docs) (or `https://voltix.onrender.com/api/docs`)
+* **Local Development UI**: `http://localhost:8080/docs` (or `http://localhost:8080/api/docs`)
 * **Features**:
   * 🔐 **Authentication & Authorization**: Interactive "Authorize" modal supporting both `Bearer <token>` and HTTP-only session cookies.
   * 📦 **Endpoints Covered**:
