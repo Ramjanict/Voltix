@@ -23,6 +23,23 @@
 * 🔐 **Secure JWT Authentication**: HTTP-Only, SameSite cookies with bcryptjs password hashing and role-based access control (`ADMIN` / `GENERAL`).
 * 💳 **Stripe Checkout**: Real Stripe payment integration with checkout sessions, order persistence in PostgreSQL, and order fulfillment status tracking (`PROCESSING`, `SHIPPED`, `DELIVERED`).
 * 👑 **Full Admin Suite**: Product management (upload, update, delete with Cloudinary / local preview), user role control, and order tracking.
+* 📚 **Interactive Swagger / OpenAPI 3.0 Documentation**: Complete interactive API explorer with schemas, DTO models, Bearer JWT & Cookie auth testbench at `/docs` and `/api/docs`.
+
+---
+
+## 📚 API Documentation (Swagger / OpenAPI)
+
+Interactive Swagger UI documentation is available on the backend:
+* **Interactive UI**: `http://localhost:8080/docs` or `http://localhost:8080/api/docs`
+* **Production UI**: `https://<your-backend-domain>/docs`
+* **Features**:
+  * 🔐 **Authentication & Authorization**: Interactive "Authorize" modal supporting both `Bearer <token>` and HTTP-only session cookies.
+  * 📦 **Endpoints Covered**:
+    * **Authentication**: Sign up, Login, Logout, Current User Details.
+    * **Users**: All users listing, user role & profile updates (Admin).
+    * **Products**: Full catalog, category lists, single product details, search, filters, upload, update, delete (Admin).
+    * **Cart**: Add to cart, view cart with product details, update item quantities, remove item, count cart.
+    * **Orders**: Stripe Checkout session creation, user order history, admin order list, order status updates.
 
 ---
 
